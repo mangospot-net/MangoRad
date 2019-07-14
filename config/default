@@ -1,0 +1,240 @@
+server default {
+listen {
+	type = auth
+	# ipv4addr = *
+	# ipv6addr = *
+	ipaddr = *
+	port = 0
+#	interface = eth0
+#	clients = per_socket_clients
+
+	limit {
+	      max_connections = 16
+	      lifetime = 0
+	      idle_timeout = 30
+	}
+}
+
+listen {
+	ipaddr = *
+#	ipv6addr = ::
+	port = 0
+	type = acct
+#	interface = eth0
+#	clients = per_socket_clients
+
+	limit {
+#		max_pps = 0
+#		idle_timeout = 0
+#		lifetime = 0
+#		max_connections = 0
+	}
+}
+
+listen {
+	type = auth
+	ipv6addr = ::	# any.  ::1 == localhost
+	port = 0
+#	interface = eth0
+#	clients = per_socket_clients
+	limit {
+	      max_connections = 16
+	      lifetime = 0
+	      idle_timeout = 30
+	}
+}
+
+listen {
+	ipv6addr = ::
+	port = 0
+	type = acct
+#	interface = eth0
+#	clients = per_socket_clients
+
+	limit {
+#		max_pps = 0
+#		idle_timeout = 0
+#		lifetime = 0
+#		max_connections = 0
+	}
+}
+
+authorize {
+	filter_username
+#	filter_password
+	preprocess
+#	operator-name
+#	cui
+#	auth_log
+	chap
+	mschap
+	digest
+#	wimax
+#	IPASS
+	suffix
+#	ntdomain
+	eap {
+		ok = return
+	}
+#	unix
+	files
+	sql
+	expiration
+	logintime
+	quotalimit
+	dailycounter
+	accessperiod
+	monthlycounter
+	noresetcounter
+#	smbpasswd
+	-ldap
+#	daily
+	expiration
+	logintime
+	pap
+#	Autz-Type Status-Server {
+#
+#	}
+}
+authenticate {
+	Auth-Type PAP {
+		pap
+	}
+	Auth-Type CHAP {
+		chap
+	}
+	Auth-Type MS-CHAP {
+		mschap
+	}
+	mschap
+	digest
+#	pam
+#	Auth-Type LDAP {
+#		ldap
+#	}
+
+	eap
+#	Auth-Type eap {
+#		eap {
+#			handled = 1
+#		}
+#		if (handled && (Response-Packet-Type == Access-Challenge)) {
+#			attr_filter.access_challenge.post-auth
+#			handled  # override the "updated" code from attr_filter
+#		}
+#	}
+}
+
+preacct {
+	preprocess
+#	acct_counters64
+#	update request {
+#	  	FreeRADIUS-Acct-Session-Start-Time = "%{expr: %l - %{%{Acct-Session-Time}:-0} - %{%{Acct-Delay-Time}:-0}}"
+#	}
+	acct_unique
+#	IPASS
+	suffix
+#	ntdomain
+	files
+}
+
+accounting {
+#	cui
+	detail
+#	daily
+	unix
+#	radutmp
+#	sradutmp
+#	main_pool
+	sql
+#	if (noop) {
+#		ok
+#	}
+#	sql_log
+#	pgsql-voip
+	exec
+	attr_filter.accounting_response
+#	Acct-Type Status-Server {
+#
+#	}
+}
+session {
+#	radutmp
+
+	#
+	#  See "Simultaneous Use Checking Queries" in mods-available/sql
+	sql
+}
+
+post-auth {
+#	if (!&reply:State) {
+#		update reply {
+#			State := "0x%{randstr:16h}"
+#		}
+#	}
+	update {
+		&reply: += &session-state:
+	}
+#	main_pool
+#	cui
+#	reply_log
+	sql
+#	sql_log
+#	ldap
+	exec
+	#	update request {
+	#	       WiMAX-MN-NAI = "%{User-Name}"
+	#	}
+	# 	update reply {
+	#		WiMAX-FA-RK-Key = 0x00
+	#		WiMAX-MSK = "%{EAP-MSK}"
+	#	}
+#	wimax
+#	update reply {
+#	       Reply-Message += "%{TLS-Cert-Serial}"
+#	       Reply-Message += "%{TLS-Cert-Expiration}"
+#	       Reply-Message += "%{TLS-Cert-Subject}"
+#	       Reply-Message += "%{TLS-Cert-Issuer}"
+#	       Reply-Message += "%{TLS-Cert-Common-Name}"
+#	       Reply-Message += "%{TLS-Cert-Subject-Alt-Name-Email}"
+#
+#	       Reply-Message += "%{TLS-Client-Cert-Serial}"
+#	       Reply-Message += "%{TLS-Client-Cert-Expiration}"
+#	       Reply-Message += "%{TLS-Client-Cert-Subject}"
+#	       Reply-Message += "%{TLS-Client-Cert-Issuer}"
+#	       Reply-Message += "%{TLS-Client-Cert-Common-Name}"
+#	       Reply-Message += "%{TLS-Client-Cert-Subject-Alt-Name-Email}"
+#	}
+
+#	insert_acct_class
+#	if (&reply:EAP-Session-Id) {
+#		update reply {
+#			EAP-Key-Name := &reply:EAP-Session-Id
+#		}
+#	}
+	remove_reply_message_if_eap
+	Post-Auth-Type REJECT {
+		sql
+		attr_filter.access_reject
+		eap
+		remove_reply_message_if_eap
+	}
+}
+
+pre-proxy {
+#	operator-name
+#	cui
+#	files
+#	attr_filter.pre-proxy
+#	pre_proxy_log
+}
+
+post-proxy {
+#	post_proxy_log
+#	attr_filter.post-proxy
+	eap
+#	Post-Proxy-Type Fail-Accounting {
+#			detail
+#	}
+}
+}

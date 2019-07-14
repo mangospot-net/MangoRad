@@ -1,0 +1,11 @@
+Alias /mangospot /var/www/MangoSpot
+<Directory />
+    Options FollowSymLinks
+    AllowOverride All
+</Directory>
+<Directory /var/www/MangoSpot/>
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride All
+    Order allow,deny
+    allow from all
+</Directory>
