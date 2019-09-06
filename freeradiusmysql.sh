@@ -44,34 +44,34 @@ case $n in
 	   mysql -uroot -p$paswd $db < /etc/freeradius/$RADIUS_VERSION/mods-config/sql/main/mysql/schema.sql
 	;;
 	2)
-	   mysql -uroot -p$paswd $db < ./config/mysql/schema.sql
+	   mysql -uroot -p$paswd $db < ~/MangoRad/config/mysql/schema.sql
 	   echo "Proccess....."
-	   mysql -uroot -p$paswd $db < ./config/mysql/data.sql
+	   mysql -uroot -p$paswd $db < ~/MangoRad/config/mysql/data.sql
 	   echo "Finish......."
 	;;
 esac
 
 # Config Sites Default
     sudo mv /etc/freeradius/$RADIUS_VERSION/sites-available/default /etc/freeradius/$RADIUS_VERSION/sites-available/default.back
-    sudo cp ./config/default /etc/freeradius/$RADIUS_VERSION/sites-available/default
+    sudo cp ~/MangoRad/config/default /etc/freeradius/$RADIUS_VERSION/sites-available/default
 
 # Config Sites Tunnel
     sudo mv /etc/freeradius/$RADIUS_VERSION/sites-available/inner-tunnel /etc/freeradius/$RADIUS_VERSION/sites-available/inner-tunnel.back
-    sudo cp ./config/inner-tunnel /etc/freeradius/$RADIUS_VERSION/sites-available/inner-tunnel
+    sudo cp ~/MangoRad/config/inner-tunnel /etc/freeradius/$RADIUS_VERSION/sites-available/inner-tunnel
 
 # Config database
     sudo mv /etc/freeradius/$RADIUS_VERSION/mods-available/sql /etc/freeradius/$RADIUS_VERSION/mods-available/sql.back
-    sudo cp ./config/mysql/sql /etc/freeradius/$RADIUS_VERSION/mods-available/sql
+    sudo cp ~/MangoRad/config/mysql/sql /etc/freeradius/$RADIUS_VERSION/mods-available/sql
 	sed -i "s/mangopass/$paswd/" /etc/freeradius/$RADIUS_VERSION/mods-available/sql
 	sed -i "s/mangodb/$db/" /etc/freeradius/$RADIUS_VERSION/mods-available/sql
 
 # Config sqlcounter
 	sudo mv /etc/freeradius/$RADIUS_VERSION/mods-available/sqlcounter /etc/freeradius/$RADIUS_VERSION/mods-available/sqlcounter.back
-	sudo cp ./config/sqlcounter /etc/freeradius/$RADIUS_VERSION/mods-available/sqlcounter
+	sudo cp ~/MangoRad/config/sqlcounter /etc/freeradius/$RADIUS_VERSION/mods-available/sqlcounter
 
 # Add query sqlcounter
-	sudo cp ./config/mysql/accessperiod.conf /etc/freeradius/$RADIUS_VERSION/mods-config/sql/counter/mysql/accessperiod.conf
-	sudo cp ./config/mysql/quotalimit.conf /etc/freeradius/$RADIUS_VERSION/mods-config/sql/counter/mysql/quotalimit.conf
+	sudo cp ~/MangoRad/config/mysql/accessperiod.conf /etc/freeradius/$RADIUS_VERSION/mods-config/sql/counter/mysql/accessperiod.conf
+	sudo cp ~/MangoRad/config/mysql/quotalimit.conf /etc/freeradius/$RADIUS_VERSION/mods-config/sql/counter/mysql/quotalimit.conf
 
 # Change Group
 sudo chgrp -h freerad /etc/freeradius/$RADIUS_VERSION/mods-enabled/sql
