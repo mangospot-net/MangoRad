@@ -14,7 +14,7 @@ fi
 RADIUS_VERSION='3.0'
 
 # Install FreeRadius
- sudo apt-get install -y freeradius freeradius-utils freeradius-pgsql freeradius-postgresql
+ sudo apt-get install -y freeradius freeradius-utils freeradius-pgsql
 
 cd /etc/freeradius/$RADIUS_VERSION/mods-enabled
 sudo ln -s ../mods-available/sql sql
