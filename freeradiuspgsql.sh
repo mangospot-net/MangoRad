@@ -44,34 +44,34 @@ case $n in
 	   sudo -u postgres psql $db < /etc/freeradius/$RADIUS_VERSION/mods-config/sql/main/postgresql/schema.sql
 	;;
 	2)
-	   sudo -u postgres psql $db < ./config/postgresql/schema.sql
+	   sudo -u postgres psql $db < ~/MangoRad/config/postgresql/schema.sql
 	   echo "Proccess....."
-	   sudo -u postgres psql $db < ./config/postgresql/data.sql
+	   sudo -u postgres psql $db < ~/MangoRad/config/postgresql/data.sql
 	   echo "Finish......."
 	;;
 esac
 
 # Config Sites Default
     sudo mv /etc/freeradius/$RADIUS_VERSION/sites-available/default /etc/freeradius/$RADIUS_VERSION/sites-available/default.back
-    sudo cp ./config/default /etc/freeradius/$RADIUS_VERSION/sites-available/default
+    sudo cp ~/MangoRad/config/default /etc/freeradius/$RADIUS_VERSION/sites-available/default
 
 # Config Sites Tunnel
     sudo mv /etc/freeradius/$RADIUS_VERSION/sites-available/inner-tunnel /etc/freeradius/$RADIUS_VERSION/sites-available/inner-tunnel.back
-    sudo cp ./config/inner-tunnel /etc/freeradius/$RADIUS_VERSION/sites-available/inner-tunnel
+    sudo cp ~/MangoRad/config/inner-tunnel /etc/freeradius/$RADIUS_VERSION/sites-available/inner-tunnel
 
 # Config database
     sudo mv /etc/freeradius/$RADIUS_VERSION/mods-available/sql /etc/freeradius/$RADIUS_VERSION/mods-available/sql.back
-    sudo cp ./config/postgresql/sql /etc/freeradius/$RADIUS_VERSION/mods-available/sql
+    sudo cp ~/MangoRad/config/postgresql/sql /etc/freeradius/$RADIUS_VERSION/mods-available/sql
 	sed -i "s/mangopass/$paswd/" /etc/freeradius/$RADIUS_VERSION/mods-available/sql
 	sed -i "s/mangodb/$db/" /etc/freeradius/$RADIUS_VERSION/mods-available/sql
 
 # Config sqlcounter
 	sudo mv /etc/freeradius/$RADIUS_VERSION/mods-available/sqlcounter /etc/freeradius/$RADIUS_VERSION/mods-available/sqlcounter.back
-	sudo cp ./config/sqlcounter /etc/freeradius/$RADIUS_VERSION/mods-available/sqlcounter
+	sudo cp ~/MangoRad/config/sqlcounter /etc/freeradius/$RADIUS_VERSION/mods-available/sqlcounter
 
 # Add query sqlcounter
-	sudo cp ./config/postgresql/accessperiod.conf /etc/freeradius/$RADIUS_VERSION/mods-config/sql/counter/postgresql/accessperiod.conf
-	sudo cp ./config/postgresql/quotalimit.conf /etc/freeradius/$RADIUS_VERSION/mods-config/sql/counter/postgresql/quotalimit.conf
+	sudo cp ~/MangoRad/config/postgresql/accessperiod.conf /etc/freeradius/$RADIUS_VERSION/mods-config/sql/counter/postgresql/accessperiod.conf
+	sudo cp ~/MangoRad/config/postgresql/quotalimit.conf /etc/freeradius/$RADIUS_VERSION/mods-config/sql/counter/postgresql/quotalimit.conf
 
 # Change Group
 sudo chgrp -h freerad /etc/freeradius/$RADIUS_VERSION/mods-enabled/sql
