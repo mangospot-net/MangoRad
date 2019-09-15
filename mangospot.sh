@@ -64,6 +64,9 @@ fi
 
 sed -i 's/"DB_PASSWORD", ".*"/"DB_PASSWORD", "'$pswd'"/' /var/www/MangoSpot/include/config.php
 sed -i 's/"DB_DATABASE", ".*"/"DB_DATABASE", "'$dbmango'"/' /var/www/MangoSpot/include/config.php
+chmod -R 777 /var/www/MangoSpot/dist/img
+chmod -R 777 /var/www/MangoSpot/dist/img/bg
+chmod -R 777 /var/www/MangoSpot/dist/img/users
 
 # Enable htaccess
 sudo a2enmod rewrite
